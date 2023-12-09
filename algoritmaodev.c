@@ -13,7 +13,7 @@ int main() {
 
     printf("******************VERILEN INPUT DOSYASINI KAYDETTIGINIZ VARSAYILMAKTADIR.******************\n"); // Başlık
     printf("******Input Dosyasini, Proje Ile Ayni Dizine Kaydediniz.******\n\n");
-    printf("Dosya adini girin: "); // Kullanıcıdan Dosya Adı Alınıyor
+    printf("Dosya adini uzantisi ile birlikte giriniz: "); // Kullanıcıdan Dosya Adı, Uzantısı ile Birlikte Alınıyor
     scanf("%s", dosyaAdi);
 
     dosya = fopen(dosyaAdi, "r");
