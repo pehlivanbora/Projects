@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX_LENGTH 1000 // Maksimum dosya uzunluÄŸu
+
+int main() {
+    FILE *dosya;
+    char metin[MAX_LENGTH], sifreliMetin[MAX_LENGTH], cozulmusMetin[MAX_LENGTH]; // DeÄŸiÅŸken AtamalarÄ±
+    int anahtar, secim;
+    char dosyaAdi[MAX_LENGTH];
+
+    printf("******************VERILEN INPUT DOSYASINI KAYDETTIGINIZ VARSAYILMAKTADIR.******************\n"); // BaÅŸlÄ±k
+    printf("******Input Dosyasini, Proje Ile Ayni Dizine Kaydediniz.******\n\n");
+    printf("Dosya adini uzantisi ile birlikte giriniz: "); // KullanÄ±cÄ±dan Dosya AdÄ±, UzantÄ±sÄ± ile Birlikte AlÄ±nÄ±yor
+    scanf("%s", dosyaAdi);
+
+    dosya = fopen(dosyaAdi, "r");
+    if (dosya == NULL) {
+        printf("Dosya acilamadi!"); // HatalÄ± GiriÅŸ UyarÄ±sÄ±
+        return 1;
+    }
+
+    fgets(metin, MAX_LENGTH, dosya); // Dosya Okuma Ä°ÅŸlemi
+    fclose(dosya); // Okunan DosyayÄ± Kapatarak Gereksiz Bellek KullanÄ±mÄ±nÄ± Ã–nleme
+
+    printf("Anahtar degerini girin: "); // KullanÄ±cÄ±dan DeÄŸer AtamasÄ± Ä°steniyor Yine
+    scanf("%d", &anahtar);
+
+    printf("1 - Sifreleme\n2 - Sifre Cozme\nSeciminiz: ");
+    scanf("%d", &secim);
+
+    if (secim == 1) { //Åifreleme Ä°ÅŸlemi.
+        int i;
+        for (i = 0; metin[i] != '\0'; ++i) {
+            if (isalpha(metin[i])) {
+                char base = islower(metin[i]) ? 'a' : 'A';
+                sifreliMetin[i] = base + (metin[i] - base + anahtar) % 26; // Harfin BulunduÄŸu "base" Ä°le Ä°ÅŸlem YapÄ±lacak
+            } else {
+                sifreliMetin[i] = metin[i];
+            }
+        }
+        sifreliMetin[i] = '\0';
+
+        printf("Sifreleme tamamlandi: %s\n", sifreliMetin);
+
+        dosya = fopen("sifreli.txt", "w"); // Yeni Dosya
+        fprintf(dosya, "%s", sifreliMetin);
+        fclose(dosya);
+    } else if (secim == 2) { //DeÅŸifre Ä°ÅŸlemi.
+        int i;
+        for (i = 0; metin[i] != '\0'; ++i) {
+            if (isalpha(metin[i])) {
+                char base = islower(metin[i]) ? 'a' : 'A';
+                cozulmusMetin[i] = base + (metin[i] - base - anahtar + 26) % 26; // Harfin BulunduÄŸu "base" Ä°le Ä°ÅŸlem YapÄ±lacak. "-", deÅŸifre iÃ§in.
+            } else {
+                cozulmusMetin[i] = metin[i];
+            }
+        }
+        cozulmusMetin[i] = '\0';
+
+        printf("Sifre cozuldu: %s\n", cozulmusMetin);
+
+        dosya = fopen("cozulmus.txt", "w"); // Yeni Dosya
+        fprintf(dosya, "%s", cozulmusMetin);
+        fclose(dosya);
+    } else {
+        printf("Gecersiz secim!"); // AynÄ± Åekilde UyarÄ±
+        return 1;
+    }
+
+    return 0;
+}
